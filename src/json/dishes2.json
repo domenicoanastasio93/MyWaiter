@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Costine di maiale",
+	"description": "Ingredienti: Costine",
+	"price": 5.50
+  },
+  {
+    "id": 2,
+    "name": "Straccetti di vitello",
+	"description": "Ingredienti: Vitello, rucola e grana",
+	"price": 7
+  }
+]

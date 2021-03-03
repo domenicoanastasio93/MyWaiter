@@ -1,0 +1,4 @@
+- implementare form Finalizza ordine preparando l'oggetto per la post e svuotando il localStorage
+- implementare Be e conversione del Fe con le chiamate al Be
+- implementare sezione di Admin (rotta '/admin')
+- implementare schermata di login

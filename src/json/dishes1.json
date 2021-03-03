@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "Ravioli",
+	"description": "Ingredienti: Ravioli, sugo, ricotta e prezzemolo",
+	"price": 4
+  },
+  {
+    "id": 2,
+    "name": "Spaghetti al pomodoro",
+	"description": "Ingredienti: Spaghetti, pomodoro e basilico",
+	"price": 3.50
+  }
+]
