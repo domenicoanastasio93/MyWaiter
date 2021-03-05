@@ -1,4 +1,8 @@
-- implementare form Finalizza ordine preparando l'oggetto per la post e svuotando il localStorage
+- aggiustare size card in lista piatti
+- aggiungere floating button in lista piatti e in home per tornare in alto
+
+- implementare logica linguaggio
 - implementare Be e conversione del Fe con le chiamate al Be
+-- per BE: se si fa annulla ordine si risbloccano i campi e si cancella dal Db l'ordine
 - implementare sezione di Admin (rotta '/admin')
 - implementare schermata di login

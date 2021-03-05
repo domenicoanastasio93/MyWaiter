@@ -1,18 +1,38 @@
 [
   {
     "id": 1,
-    "name": "Primi di pasta"
+    "name": "Primi di pasta",
+	"order": 1,
+	"additiveNotes": "Note aggiuntive per i primi di pasta"
   },
   {
     "id": 2,
-    "name": "Secondi di carne"
+    "name": "Secondi di carne",
+	"order": 3,
+	"additiveNotes": "Note aggiuntive per i secondi di carne"
   },
   {
     "id": 3,
-    "name": "Contorni"
+    "name": "Secondi di pesce",
+	"order": 3,
+	"additiveNotes": "Note aggiuntive per i secondi di pesce"
   },
   {
     "id": 4,
-    "name": "Vini rossi"
+    "name": "Contorni",
+	"order": 4,
+	"additiveNotes": "Note aggiuntive per i contorni"
+  },
+  {
+    "id": 5,
+    "name": "Vini rossi",
+	"order": 5,
+	"additiveNotes": "Note aggiuntive per i vini rossi"
+  },
+  {
+    "id": 6,
+    "name": "Vini bianchi",
+	"order": 6,
+	"additiveNotes": "Note aggiuntive per i vini bianchi"
   }
 ]

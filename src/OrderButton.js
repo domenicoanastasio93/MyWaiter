@@ -4,16 +4,17 @@ import './App.css';
 
 import Button from '@material-ui/core/Button';
 
-const BackButton = () => {
+const OrderButton = () => {
     return (
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/order" style={{ textDecoration: "none" }}>
             <Button
+                style={{ marginLeft: 10 }}
                 variant="contained"
                 color="default">
-                Back
+                Go to order
                 </Button>
         </Link>
     )
 }
 
-export default BackButton;
+export default OrderButton;

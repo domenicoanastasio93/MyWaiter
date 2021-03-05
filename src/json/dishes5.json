@@ -1,0 +1,19 @@
+{
+  "categoryId": 5,
+  "categoryName": "Vini rossi",
+  "categoryAdditiveNotes": "Note aggiuntive per vini rossi",
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Taurasi",
+	  "description": "Vino rosso Taurasi",
+	  "price": 12
+    },
+    {
+      "id": 2,
+      "name": "Aglianico",
+	  "description": "Vino rosso Aglianico",
+	  "price": 15
+    }
+  ]
+}

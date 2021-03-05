@@ -1,6 +1,5 @@
 .home{
-  background-image: url("img/menu-bg.jpg");
-  background-size: cover;
+  background-color: #f7f2f2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -8,15 +7,10 @@
   min-height: 100vh;
 }
 
-.categories{
+.rowList{
   margin: 40px;
-}
-
-.button{
-  margin: 40px;
-}
-
-.text{
-  position: relative;
-  top: 40%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
 }

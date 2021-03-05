@@ -1,14 +1,13 @@
-[
-  {
-    "id": 1,
-    "name": "Taurasi",
-	"description": "Vino rosso Taurasi",
-	"price": 12
-  },
-  {
-    "id": 2,
-    "name": "Aglianico",
-	"description": "Vino rosso Aglianico",
-	"price": 15
-  }
-]
+{
+  "categoryId": 4,
+  "categoryName": "Contorni",
+  "categoryAdditiveNotes": "Note aggiuntive per contorni",
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Insalata",
+	  "description": "Ingredienti: Insalata",
+	  "price": 2
+    }
+  ]
+}

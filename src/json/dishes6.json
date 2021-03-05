@@ -1,0 +1,19 @@
+{
+  "categoryId": 6,
+  "categoryName": "Vini bianchi",
+  "categoryAdditiveNotes": "Note aggiuntive per vini bianchi",
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Falanghina",
+	  "description": "Vino bianco Falanghina",
+	  "price": 13
+    },
+    {
+      "id": 2,
+      "name": "Pinot",
+	  "description": "Vino rosso Pinot",
+	  "price": 18
+    }
+  ]
+}

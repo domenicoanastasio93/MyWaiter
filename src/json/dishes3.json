@@ -1,8 +1,19 @@
-[
-  {
-    "id": 1,
-    "name": "Insalata",
-	"description": "Ingredienti: Insalata",
-	"price": 2
-  }
-]
+{
+  "categoryId": 3,
+  "categoryName": "Secondi di pesce",
+  "categoryAdditiveNotes": "Note aggiuntive per secondi di pesce",
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Frittura mista",
+	  "description": "Ingredienti: Gamberi, calamari e limone",
+	  "price": 9
+    },
+    {
+      "id": 2,
+      "name": "Pesce spada alla griglia",
+	  "description": "Pesce spada",
+	  "price": 13
+    }
+  ]
+}

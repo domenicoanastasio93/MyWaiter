@@ -2,50 +2,124 @@ import React from 'react';
 import categoryImage from './img/home-restaurant.gif';
 import './App.css';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Popover from 'react-bootstrap/Popover';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Typography from '@material-ui/core/Typography';
+import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@material-ui/core/Snackbar';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Button from '@material-ui/core/Button';
+
+const useCardStyles = makeStyles({
+    root: {
+        width: 300,
+        margin: 10,
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'column'
+    },
+    media: {
+        height: 200
+    }
+});
+
+const useAlertStyles = makeStyles({
+    cookieAlert: {
+        "& .MuiAlert-icon": {
+            display: 'none'
+        },
+        "& .MuiAlert-action": {
+            display: 'none'
+        }
+    }
+});
 
 const DishItem = (props) => {
+    const cardClasses = useCardStyles();
+
+    const alertClasses = useAlertStyles();
+    const [openSnackbar, setOpenSnackbar] = React.useState(false);
+    const snackbarClose = (event, reason) => {
+        setOpenSnackbar(false);
+    };
+
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const dialogOpen = () => {
+        if (localStorage.getItem('finalized') === 'no') {
+            setOpenDialog(true);
+        }
+    };
+    const dialogClose = () => {
+        setOpenDialog(false);
+    };
 
     const addDishToOrder = () => {
         var orderList = JSON.parse(localStorage.getItem('order'));
+        orderList.map((item, index) => {
+            if (item.categoryId === props.categoryId) {
+                const newDishes = [...item.dishes, props.dish];
+                item.dishes = newDishes;
+            }
+        });
+        localStorage.setItem('order', JSON.stringify(orderList));
 
-        if (orderList === null || orderList.length === 0) {
-            orderList = [{ id: props.dish.id, name: props.dish.name, price: props.dish.price }];
-            localStorage.setItem('order', JSON.stringify(orderList));
-        } else {
-            const newList = [...orderList, { id: props.dish.id, name: props.dish.name, price: props.dish.price }]
-            localStorage.setItem('order', JSON.stringify(newList));
-        }
+        setOpenDialog(false);
+        setOpenSnackbar(true);
     }
 
-    const popover = (
-        <Popover id="popover-basic">
-            <Popover.Content>
-                <div>
-                    {props.dish.description}
-                </div>
-                <br />
-                <div>
-                    Price: {props.dish.price} €
-            </div>
-            </Popover.Content>
-        </Popover>
-    );
-
     return (
-        <Card className="text-center" style={{ marginBottom: 30 }}>
-            <Card.Img variant="top" src={categoryImage} style={{ width: 'auto', height: 180 }} />
-            <Card.Body>
-                <Card.Title>{props.dish.name}</Card.Title>
-                <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
-                    <Button variant="primary" size="sm">Infos</Button>
-                </OverlayTrigger>
-                <Button variant="primary" size="sm" onClick={() => addDishToOrder()} style={{ marginLeft: 10 }}>Add</Button>
-            </Card.Body>
+        <Card className={cardClasses.root}>
+            <CardActionArea onClick={dialogOpen}>
+                <CardMedia
+                    className={cardClasses.media}
+                    image={categoryImage}
+                    title={props.dish.name}
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {props.dish.name}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        {props.dish.description}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        Price: {props.dish.price} €
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+
+            <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={snackbarClose}>
+                <Alert className={alertClasses.cookieAlert} onClose={snackbarClose} severity="success" variant="filled">
+                    {props.dish.name} added to order
+                   </Alert>
+            </Snackbar>
+
+            <Dialog
+                open={openDialog}
+                onClose={dialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Do you want to add {props.dish.name} to order?
+                        </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={dialogClose} color="primary">
+                        Cancel
+                        </Button>
+                    <Button onClick={addDishToOrder} color="primary" autoFocus>
+                        Add
+                        </Button>
+                </DialogActions>
+            </Dialog>
         </Card>
     )
 }

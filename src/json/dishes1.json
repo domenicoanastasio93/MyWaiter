@@ -1,14 +1,19 @@
-[
-  {
-    "id": 1,
-    "name": "Ravioli",
-	"description": "Ingredienti: Ravioli, sugo, ricotta e prezzemolo",
-	"price": 4
-  },
-  {
-    "id": 2,
-    "name": "Spaghetti al pomodoro",
-	"description": "Ingredienti: Spaghetti, pomodoro e basilico",
-	"price": 3.50
-  }
-]
+{
+  "categoryId": 1,
+  "categoryName": "Primi di pasta",
+  "categoryAdditiveNotes": "Note aggiuntive per primi di pasta",
+  "dishes": [
+    {
+      "id": 1,
+      "name": "Spaghetti al pomodoro",
+      "description": "Ingredienti: Spaghetti, pomodoro e basilico",
+      "price": 3.5
+    },
+	{
+      "id": 2,
+      "name": "Spaghetti alle vongole",
+      "description": "Ingredienti: Spaghetti, vongole e prezzemolo",
+      "price": 5
+    }
+  ]
+}
