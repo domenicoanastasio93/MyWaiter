@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
+
 import './App.css';
 import BackButton from './BackButton.js';
 import LanguageButton from './LanguageButton.js';
+import OrderTable from './OrderTable.js';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -36,8 +29,6 @@ const useAlertStyles = makeStyles({
 });
 
 const Order = () => {
-    const [orderList, setOrderList] = useState([]);
-    const [totalPrice, setTotalPrice] = useState([]);
     const [notes, setNotes] = useState([]);
     const [table, setTable] = useState([]);
     const [inError, setInError] = React.useState(false);
@@ -58,28 +49,33 @@ const Order = () => {
     const alertClasses = useAlertStyles();
     const [openSuccessSnackbar, setOpenSuccessSnackbar] = React.useState(false);
     const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
-    const snackbarSuccessClose = (event, reason) => {
+    const snackbarSuccessClose = () => {
         setOpenSuccessSnackbar(false);
     };
-    const snackbarErrorClose = (event, reason) => {
+    const snackbarErrorClose = () => {
         setOpenErrorSnackbar(false);
     };
 
+    const [finalizeButtonLabel, setFinalizeButtonLabel] = useState([]);
+    const [additiveNotesLabel, setAdditiveNotesLabel] = useState([]);
+    const [tableLabel, setTableLabel] = useState([]);
+    const [dialogLabels, setDialogLabels] = useState([]);
+    const [snackbarLabels, setSnackbarLabels] = useState([]);
     useEffect(() => {
-        const newList = JSON.parse(localStorage.getItem('order'));
-        setOrderList(newList);
+        if (localStorage.getItem('lang') === 'en') {
+            setFinalizeButtonLabel("Finalize order");
+            setAdditiveNotesLabel("Additive notes");
+            setTableLabel("Table n.");
+            setDialogLabels(["Are you sure you want to finalize the order?", "Cancel", "Finalize"]);
+            setSnackbarLabels(["Order finalized", "Field 'Table n.' is required!"]);
+        } else if (localStorage.getItem('lang') === 'it') {
+            setFinalizeButtonLabel("Finalizza ordine");
+            setAdditiveNotesLabel("Note aggiuntive");
+            setTableLabel("Tavolo n.");
+            setDialogLabels(["Sei sicuro di voler finalizzare l'ordine", "Annulla", "Finalizza"]);
+            setSnackbarLabels(["Ordine finalizzato", "Il campo 'Tavolo n.' è obbligatorio!"]);
+        }
     }, []);
-
-    const removeDishFromOrder = (subIndex, index) => {
-        var newList = [...orderList];
-        newList.map((item, i) => {
-            if (i === index) {
-                item.dishes.splice(subIndex, 1);
-            }
-        })
-        setOrderList(newList);
-        localStorage.setItem('order', JSON.stringify(newList));
-    }
 
     const finalizeOrder = () => {
         localStorage.setItem('additiveNotes', notes);
@@ -113,14 +109,6 @@ const Order = () => {
 
     return (
         <div className="home">
-            {useEffect(() => {
-                var tot = 0;
-                orderList.map((item, index) => {
-                    tot = tot + item.dishes.reduce((tempTot, subItem) => tempTot = tempTot + subItem.price, 0);
-                })
-                setTotalPrice(tot);
-            })};
-
             <div className="rowList">
                 <AppBar position="fixed">
                     <Toolbar style={{ justifyContent: "space-between" }}>
@@ -131,76 +119,26 @@ const Order = () => {
                 </AppBar>
             </div>
 
-            <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell style={{ width: '70%', fontWeight: "bold" }}>Dish</TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    {orderList.map((item, index) => {
-                        if (item.dishes && item.dishes.length > 0) {
-                            return (
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell style={{ width: '70%', fontWeight: "bold" }}>{item.categoryName}</TableCell>
-                                        <TableCell></TableCell>
-                                        <TableCell></TableCell>
-                                    </TableRow>
-                                    {item.dishes.map((subItem, subIndex) => (
-                                        <TableRow>
-                                            <TableCell style={{ width: '70%' }}>{subItem.name}</TableCell>
-                                            <TableCell>{subItem.price}</TableCell>
-                                            <TableCell>
-                                                {localStorage.getItem('finalized') === 'no'
-                                                    ? <IconButton
-                                                        aria-label="delete"
-                                                        color="secondary"
-                                                        onClick={() => removeDishFromOrder(subIndex, index)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                    : <span></span>
-                                                }
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            )
-                        }
-                    })}
-                    <TableBody>
-                        <TableRow>
-                            <TableCell style={{ fontWeight: "bold" }}>TOTAL</TableCell>
-                            <TableCell style={{ fontWeight: "bold" }}>{totalPrice} €</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
+            <OrderTable></OrderTable>
             <br />
 
             <div>
                 {localStorage.getItem('finalized') === 'no'
                     ? <TextField
-                        label="Additional notes"
+                        label={additiveNotesLabel}
                         multiline
                         rows={8}
                         value={notes}
                         variant="outlined"
-                        onChange={onChangeNotes}
-                    />
+                        onChange={onChangeNotes} />
                     : <TextField
                         disabled
-                        label="Additional notes"
+                        label={additiveNotesLabel}
                         multiline
                         rows={8}
                         value={localStorage.getItem('additiveNotes')}
                         variant="outlined"
-                        onChange={onChangeNotes}
-                    />
+                        onChange={onChangeNotes} />
                 }
             </div>
 
@@ -208,35 +146,32 @@ const Order = () => {
                 {localStorage.getItem('finalized') === 'no'
                     ? (!inError
                         ? <TextField
-                            label="Table n."
+                            label={tableLabel}
                             type="number"
                             value={table}
                             variant="outlined"
                             onChange={onChangeTable}
                             inputProps={{ style: { textAlign: 'center' } }}
-                            style={{ width: 100 }}
-                        />
+                            style={{ width: 100 }} />
                         : <TextField
                             error
-                            label="Table n."
+                            label={tableLabel}
                             type="number"
                             value={table}
                             variant="outlined"
                             onChange={onChangeTable}
                             inputProps={{ style: { textAlign: 'center' } }}
-                            style={{ width: 100 }}
-                        />
+                            style={{ width: 100 }} />
                     )
                     : <TextField
                         disabled
-                        label="Table n."
+                        label={tableLabel}
                         type="number"
                         value={localStorage.getItem('table')}
                         variant="outlined"
                         onChange={onChangeTable}
                         inputProps={{ style: { textAlign: 'center' } }}
-                        style={{ width: 100 }}
-                    />
+                        style={{ width: 100 }} />
                 }
 
                 <Button
@@ -244,7 +179,7 @@ const Order = () => {
                     color="primary"
                     style={{ marginLeft: 40 }}
                     onClick={dialogOpen}>
-                    Finalize order
+                    {finalizeButtonLabel}
                 </Button>
             </div>
 
@@ -252,32 +187,39 @@ const Order = () => {
                 open={openDialog}
                 onClose={dialogClose}
                 aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
+                aria-describedby="alert-dialog-description">
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure to finalize the order?
-                        </DialogContentText>
+                        {dialogLabels[0]}
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={dialogClose} color="primary">
-                        Cancel
-                        </Button>
+                        {dialogLabels[1]}
+                    </Button>
                     <Button onClick={finalizeOrder} color="primary" autoFocus>
-                        Finalize
-                        </Button>
+                        {dialogLabels[2]}
+                    </Button>
                 </DialogActions>
             </Dialog>
 
             <Snackbar open={openSuccessSnackbar} autoHideDuration={3000} onClose={snackbarSuccessClose}>
-                <Alert className={alertClasses.cookieAlert} onClose={snackbarSuccessClose} severity="success" variant="filled">
-                    Order finalized
-                   </Alert>
+                <Alert
+                    className={alertClasses.cookieAlert}
+                    onClose={snackbarSuccessClose}
+                    severity="success"
+                    variant="filled">
+                    {snackbarLabels[0]}
+                </Alert>
             </Snackbar>
             <Snackbar open={openErrorSnackbar} autoHideDuration={3000} onClose={snackbarErrorClose}>
-                <Alert className={alertClasses.cookieAlert} onClose={snackbarErrorClose} severity="error" variant="filled">
-                    Table field is required
-                   </Alert>
+                <Alert
+                    className={alertClasses.cookieAlert}
+                    onClose={snackbarErrorClose}
+                    severity="error"
+                    variant="filled">
+                    {snackbarLabels[1]}
+                </Alert>
             </Snackbar>
         </div >
     )

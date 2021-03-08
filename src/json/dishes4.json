@@ -1,13 +1,23 @@
 {
   "categoryId": 4,
-  "categoryName": "Contorni",
-  "categoryAdditiveNotes": "Note aggiuntive per contorni",
+  "categoryNameEn": "Side dishes",
+  "categoryNameIt": "Contorni",
+  "categoryAdditiveNotesEn": "Additive notes for side dishes",
+  "categoryAdditiveNotesIt": "Note aggiuntive per contorni",
   "dishes": [
     {
       "id": 1,
       "name": "Insalata",
-	  "description": "Ingredienti: Insalata",
+	  "descriptionEn": "Ingredients: Salad",
+	  "descriptionIt": "Ingredienti: Insalata",
 	  "price": 2
+    },
+	{
+      "id": 2,
+      "name": "Patatine fritte",
+	  "descriptionEn": "Ingredients: Chips",
+	  "descriptionIt": "Ingredienti: Patatine",
+	  "price": 1.5
     }
   ]
 }

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import CategoryItem from './CategoryItem.js';
-import OrderButton from './OrderButton.js';
-import LanguageButton from './LanguageButton.js';
+
 import './App.css';
+import CategoryItem from './CategoryItem.js';
+import LanguageButton from './LanguageButton.js';
+import OrderButton from './OrderButton.js';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
-const Home = () => {
+const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -16,27 +17,28 @@ const Home = () => {
 
     if (localStorage.getItem('order') === null) {
       var order = [];
-      categoriesJson.map((item, index) => {
+
+      categoriesJson.map((item) => {
+        var item = {
+          categoryId: item.id,
+          categoryNameEn: item.nameEn,
+          categoryNameIt: item.nameIt,
+          dishes: []
+        }
         if (order === null || order.length === 0) {
-          order = [{
-            categoryId: item.id,
-            categoryName: item.name,
-            dishes: []
-          }]
+          order = [item]
         } else {
-          order = [...order, {
-            categoryId: item.id,
-            categoryName: item.name,
-            dishes: []
-          }]
+          order = [...order, item]
         }
       })
+
       localStorage.setItem('order', JSON.stringify(order));
     }
   }, [])
 
   return (
     <div className="home">
+
       <div className="rowList">
         <AppBar position="fixed">
           <Toolbar style={{ justifyContent: "space-between" }}>
@@ -58,4 +60,4 @@ const Home = () => {
   )
 }
 
-export default Home;
+export default Categories;

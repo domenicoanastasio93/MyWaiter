@@ -1,18 +1,22 @@
 {
   "categoryId": 3,
-  "categoryName": "Secondi di pesce",
-  "categoryAdditiveNotes": "Note aggiuntive per secondi di pesce",
+  "categoryNameEn": "Second courses of fish",
+  "categoryNameIt": "Secondi di pesce",
+  "categoryAdditiveNotesEn": "Additive notes for second courses of fish",
+  "categoryAdditiveNotesIt": "Note aggiuntive per secondi di pesce",
   "dishes": [
     {
       "id": 1,
       "name": "Frittura mista",
-	  "description": "Ingredienti: Gamberi, calamari e limone",
+	  "descriptionEn": "Ingredients: Shrimps, squids and lemon",
+	  "descriptionIt": "Ingredienti: Gamberi, calamari e limone",
 	  "price": 9
     },
     {
       "id": 2,
       "name": "Pesce spada alla griglia",
-	  "description": "Pesce spada",
+	  "descriptionEn": "Ingredients: Swordfish",
+	  "descriptionIt": "Ingredienti: Pesce spada",
 	  "price": 13
     }
   ]

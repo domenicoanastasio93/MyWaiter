@@ -1,18 +1,22 @@
 {
   "categoryId": 2,
-  "categoryName": "Secondi di carne",
-  "categoryAdditiveNotes": "Note aggiuntive per secondi di carne",
+  "categoryNameEn": "Second courses of meat",
+  "categoryNameIt": "Secondi di carne",
+  "categoryAdditiveNotesEn": "Additive notes for second courses of meat",
+  "categoryAdditiveNotesIt": "Note aggiuntive per secondi di carne",
   "dishes": [
     {
       "id": 1,
       "name": "Costine di maiale",
-	  "description": "Ingredienti: Costine",
+	  "descriptionEn": "Ingredients: Racks",
+	  "descriptionIt": "Ingredienti: Costine",
 	  "price": 5.50
     },
     {
       "id": 2,
       "name": "Straccetti di vitello",
-	  "description": "Ingredienti: Vitello, rucola e grana",
+	  "descriptionEn": "Ingredients: Veal, rocket and parmesan",
+	  "descriptionIt": "Ingredienti: Vitello, rucola e grana",
 	  "price": 7
     }
   ]

@@ -1,38 +1,50 @@
 [
   {
     "id": 1,
-    "name": "Primi di pasta",
+	"nameEn": "First courses of pasta",
+    "nameIt": "Primi di pasta",
 	"order": 1,
-	"additiveNotes": "Note aggiuntive per i primi di pasta"
+	"additiveNotesEn": "Additive notes for the first courses of pasta",
+	"additiveNotesIt": "Note aggiuntive per i primi di pasta"
   },
   {
     "id": 2,
-    "name": "Secondi di carne",
+	"nameEn": "Second courses of meat",
+    "nameIt": "Secondi di carne",
 	"order": 3,
-	"additiveNotes": "Note aggiuntive per i secondi di carne"
+	"additiveNotesEn": "Additive notes for the second courses of meat",
+	"additiveNotesIt": "Note aggiuntive per i secondi di carne"
   },
   {
     "id": 3,
-    "name": "Secondi di pesce",
+	"nameEn": "Second courses of fish",
+    "nameIt": "Secondi di pesce",
 	"order": 3,
-	"additiveNotes": "Note aggiuntive per i secondi di pesce"
+	"additiveNotesEn": "Additive notes for the second courses of fish",
+	"additiveNotesIt": "Note aggiuntive per i secondi di pesce"
   },
   {
     "id": 4,
-    "name": "Contorni",
+    "nameEn": "Side dishes",
+	"nameIt": "Contorni",
 	"order": 4,
-	"additiveNotes": "Note aggiuntive per i contorni"
+	"additiveNotesEn": "Additive notes for the side dishes",
+	"additiveNotesIt": "Note aggiuntive per i contorni"
   },
   {
     "id": 5,
-    "name": "Vini rossi",
+    "nameEn": "Red wines",
+	"nameIt": "Vini rossi",
 	"order": 5,
-	"additiveNotes": "Note aggiuntive per i vini rossi"
+	"additiveNotesEn": "Additive notes for the red wines",
+	"additiveNotesIt": "Note aggiuntive per i vini rossi"
   },
   {
     "id": 6,
-    "name": "Vini bianchi",
+    "nameEn": "White wines",
+	"nameIt": "Vini bianchi",
 	"order": 6,
-	"additiveNotes": "Note aggiuntive per i vini bianchi"
+	"additiveNotesEn": "Additive notes for the white vines",
+	"additiveNotesIt": "Note aggiuntive per i vini bianchi"
   }
 ]

@@ -1,6 +1,7 @@
-import React from 'react';
-import categoryImage from './img/home-restaurant.gif';
+import React, { useEffect, useState } from 'react';
+
 import './App.css';
+import categoryImage from './img/home-restaurant.gif';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -45,7 +46,7 @@ const DishItem = (props) => {
 
     const alertClasses = useAlertStyles();
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const snackbarClose = (event, reason) => {
+    const snackbarClose = () => {
         setOpenSnackbar(false);
     };
 
@@ -61,7 +62,7 @@ const DishItem = (props) => {
 
     const addDishToOrder = () => {
         var orderList = JSON.parse(localStorage.getItem('order'));
-        orderList.map((item, index) => {
+        orderList.map((item) => {
             if (item.categoryId === props.categoryId) {
                 const newDishes = [...item.dishes, props.dish];
                 item.dishes = newDishes;
@@ -72,6 +73,24 @@ const DishItem = (props) => {
         setOpenDialog(false);
         setOpenSnackbar(true);
     }
+
+    const [descriptionLabel, setDescriptionLabel] = useState([]);
+    const [priceLabel, setPriceLabel] = useState([]);
+    const [dialogLabels, setDialogLabels] = useState([]);
+    const [snackbarLabel, setSnackbarLabel] = useState([]);
+    useEffect(() => {
+        if (localStorage.getItem('lang') === 'en') {
+            setDescriptionLabel(props.dish.descriptionEn);
+            setPriceLabel("Price");
+            setDialogLabels(["Do you want to add the dish to the order?", "Cancel", "Add"]);
+            setSnackbarLabel("Dish added");
+        } else if (localStorage.getItem('lang') === 'it') {
+            setDescriptionLabel(props.dish.descriptionIt);
+            setPriceLabel("Prezzo");
+            setDialogLabels(["Aggiungere il piatto all'ordine?", "Annulla", "Aggiungi"]);
+            setSnackbarLabel("Piatto aggiunto");
+        }
+    }, []);
 
     return (
         <Card className={cardClasses.root}>
@@ -86,18 +105,22 @@ const DishItem = (props) => {
                         {props.dish.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        {props.dish.description}
+                        {descriptionLabel}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Price: {props.dish.price} €
+                        {priceLabel}: {props.dish.price} €
                     </Typography>
                 </CardContent>
             </CardActionArea>
 
             <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={snackbarClose}>
-                <Alert className={alertClasses.cookieAlert} onClose={snackbarClose} severity="success" variant="filled">
-                    {props.dish.name} added to order
-                   </Alert>
+                <Alert
+                    className={alertClasses.cookieAlert}
+                    onClose={snackbarClose}
+                    severity="success"
+                    variant="filled">
+                    {snackbarLabel}
+                </Alert>
             </Snackbar>
 
             <Dialog
@@ -108,16 +131,16 @@ const DishItem = (props) => {
             >
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Do you want to add {props.dish.name} to order?
-                        </DialogContentText>
+                        {dialogLabels[0]}
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={dialogClose} color="primary">
-                        Cancel
-                        </Button>
+                        {dialogLabels[1]}
+                    </Button>
                     <Button onClick={addDishToOrder} color="primary" autoFocus>
-                        Add
-                        </Button>
+                        {dialogLabels[2]}
+                    </Button>
                 </DialogActions>
             </Dialog>
         </Card>

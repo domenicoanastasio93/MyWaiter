@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import categoryImage from './img/home-restaurant.gif';
+
 import './App.css';
+import categoryImage from './img/home-restaurant.gif';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -64,11 +65,20 @@ const useStyles = makeStyles((theme) => ({
 const CategoryItem = (props) => {
     const classes = useStyles();
 
+    const [categoryNameLabel, setCategoryNameLabel] = useState([]);
+    useEffect(() => {
+        if (localStorage.getItem('lang') === 'en') {
+            setCategoryNameLabel(props.category.nameEn);
+        } else if (localStorage.getItem('lang') === 'it') {
+            setCategoryNameLabel(props.category.nameIt);
+        }
+    }, []);
+
     return (
         <Link to={"/dishes/" + props.category.id} style={{ textDecoration: 'none' }}>
             <ButtonBase
                 focusRipple
-                key={props.category.name}
+                key={categoryNameLabel}
                 className={classes.image}
                 focusVisibleClassName={classes.focusVisible}
                 style={{
@@ -90,7 +100,7 @@ const CategoryItem = (props) => {
                         color="inherit"
                         className={classes.imageTitle}
                     >
-                        {props.category.name}
+                        {categoryNameLabel}
                     </Typography>
                 </span>
             </ButtonBase>
