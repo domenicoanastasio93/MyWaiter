@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-
-import './App.css';
-import BackButton from './BackButton.js';
-import OrderButton from './OrderButton.js';
-import LanguageButton from './LanguageButton.js';
-import DishItem from './DishItem.js';
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import React, { useEffect, useState } from 'react';
+import './App.css';
+import BackButton from './BackButton.js';
+import DishItem from './DishItem.js';
+import LanguageButton from './LanguageButton.js';
+import OrderButton from './OrderButton.js';
+
+
 
 const Dishes = (props) => {
     const [dishes, setDishes] = useState([]);
@@ -17,17 +17,35 @@ const Dishes = (props) => {
     const [categoryAdditiveNotes, setCategoryAdditiveNotes] = useState([]);
 
     useEffect(() => {
-        const jsonById = require('./json/dishes' + props.match.params.id + '.json');
-        setCategoryId(jsonById.categoryId);
-        setDishes(jsonById.dishes);
-        if (localStorage.getItem('lang') === 'en') {
-            setCategoryName(jsonById.categoryNameEn);
-            setCategoryAdditiveNotes(jsonById.categoryAdditiveNotesEn);
-        } else if (localStorage.getItem('lang') === 'it') {
-            setCategoryName(jsonById.categoryNameIt);
-            setCategoryAdditiveNotes(jsonById.categoryAdditiveNotesIt);
-        }
-    });
+        fetch(localStorage.getItem('host') + '/mywaiter/categories/' + props.match.params.id, {
+            method: "GET"
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setCategoryId(data.id);
+                if (localStorage.getItem('lang') === 'en') {
+                    setCategoryName(data.nameEn);
+                    setCategoryAdditiveNotes(data.additiveNotesEn);
+                } else if (localStorage.getItem('lang') === 'it') {
+                    setCategoryName(data.nameIt);
+                    setCategoryAdditiveNotes(data.additiveNotesIt);
+                }
+            })
+    }, [])
+
+    useEffect(() => {
+        fetch(localStorage.getItem('host') + '/mywaiter/dishes/category/' + props.match.params.id, {
+            method: "GET"
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setDishes(data);
+            })
+    }, [])
+
+    useEffect(() => {
+
+    })
 
     return (
         <div className="home">

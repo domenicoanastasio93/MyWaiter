@@ -1,40 +1,44 @@
-import React, { useState, useEffect } from 'react';
-
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import CategoryItem from './CategoryItem.js';
 import LanguageButton from './LanguageButton.js';
 import OrderButton from './OrderButton.js';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-
-const Categories = () => {
+const Categories = (props) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const categoriesJson = require('./json/categories.json');
-    setCategories(categoriesJson);
-
-    if (localStorage.getItem('order') === null) {
-      var order = [];
-
-      categoriesJson.map((item) => {
-        var item = {
-          categoryId: item.id,
-          categoryNameEn: item.nameEn,
-          categoryNameIt: item.nameIt,
-          dishes: []
+    fetch(localStorage.getItem('host') + '/mywaiter/categories', {
+      method: "GET"
+    })
+      .then(res => res.json())
+      .then((data) => {
+        if (localStorage.getItem('order') === null || localStorage.getItem('order').length === 0) {
+          var order = [];
+          data.map((item) => {
+            var item = {
+              categoryId: item.id,
+              categoryNameEn: item.nameEn,
+              categoryNameIt: item.nameIt,
+              dishes: []
+            }
+            if (order === null || order.length === 0) {
+              order = [item]
+            } else {
+              order = [...order, item]
+            }
+          })
+          localStorage.setItem('order', JSON.stringify(order));
         }
-        if (order === null || order.length === 0) {
-          order = [item]
-        } else {
-          order = [...order, item]
-        }
+        setCategories(data);
       })
-
-      localStorage.setItem('order', JSON.stringify(order));
-    }
   }, [])
+
+  useEffect(() => {
+
+  })
 
   return (
     <div className="home">

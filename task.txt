@@ -1,6 +1,0 @@
-- sistemare json
-
-- implementare Be e conversione del Fe con le chiamate al Be
--- per BE: se si fa annulla ordine si risbloccano i campi e si cancella dal Db l'ordine
-- implementare sezione di Admin (rotta '/admin')
-- implementare schermata di login

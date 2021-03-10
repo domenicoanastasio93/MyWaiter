@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-
+import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Snackbar from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
+import Alert from '@material-ui/lab/Alert';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import BackButton from './BackButton.js';
 import LanguageButton from './LanguageButton.js';
 import OrderTable from './OrderTable.js';
 
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Alert from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
+
 
 const useAlertStyles = makeStyles({
     cookieAlert: {
@@ -29,74 +29,130 @@ const useAlertStyles = makeStyles({
 });
 
 const Order = () => {
-    const [notes, setNotes] = useState([]);
+    const [notes, setNotes] = React.useState("");
     const [table, setTable] = useState([]);
     const [inError, setInError] = React.useState(false);
 
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const dialogOpen = () => {
+    const [openFinalizeOrderDialog, setOpenFinalizeOrderDialog] = React.useState(false);
+    const dialogFinalizeOrderOpen = () => {
         if (table === null || table === '' || table.length === 0) {
             setInError(true);
             setOpenErrorSnackbar(true);
         } else {
-            setOpenDialog(true);
+            setOpenFinalizeOrderDialog(true);
         }
     };
-    const dialogClose = () => {
-        setOpenDialog(false);
+    const dialogFinalizeOrderClose = () => {
+        setOpenFinalizeOrderDialog(false);
+    };
+
+    const [openCancelOrderDialog, setOpenCancelOrderDialog] = React.useState(false);
+    const dialogCancelOrderOpen = () => {
+        setOpenCancelOrderDialog(true);
+    };
+    const dialogCancelOrderClose = () => {
+        setOpenCancelOrderDialog(false);
     };
 
     const alertClasses = useAlertStyles();
-    const [openSuccessSnackbar, setOpenSuccessSnackbar] = React.useState(false);
+    const [openFinalizeOrderSnackbar, setOpenFinalizeOrderSnackbar] = React.useState(false);
+    const [openCancelOrderSnackbar, setOpenCancelOrderSnackbar] = React.useState(false);
     const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
-    const snackbarSuccessClose = () => {
-        setOpenSuccessSnackbar(false);
+    const snackbarFinalizeOrderClose = () => {
+        setOpenFinalizeOrderSnackbar(false);
+    };
+    const snackbarCancelOrderClose = () => {
+        setOpenCancelOrderSnackbar(false);
     };
     const snackbarErrorClose = () => {
         setOpenErrorSnackbar(false);
     };
 
-    const [finalizeButtonLabel, setFinalizeButtonLabel] = useState([]);
+    const [finalizeButtonLabels, setFinalizeButtonLabels] = useState([]);
     const [additiveNotesLabel, setAdditiveNotesLabel] = useState([]);
     const [tableLabel, setTableLabel] = useState([]);
     const [dialogLabels, setDialogLabels] = useState([]);
     const [snackbarLabels, setSnackbarLabels] = useState([]);
     useEffect(() => {
         if (localStorage.getItem('lang') === 'en') {
-            setFinalizeButtonLabel("Finalize order");
+            setFinalizeButtonLabels(["Finalize order", "Cancel order"]);
             setAdditiveNotesLabel("Additive notes");
             setTableLabel("Table n.");
-            setDialogLabels(["Are you sure you want to finalize the order?", "Cancel", "Finalize"]);
-            setSnackbarLabels(["Order finalized", "Field 'Table n.' is required!"]);
+            setDialogLabels([
+                "Are you sure you want to finalize the order?",
+                "Cancel",
+                "Finalize",
+                "Are you sure you want to cancel the order?",
+                "No",
+                "Yes"
+            ]);
+            setSnackbarLabels([
+                "Order finalized",
+                "Order canceled",
+                "Field 'Table n.' is required!"
+            ]);
         } else if (localStorage.getItem('lang') === 'it') {
-            setFinalizeButtonLabel("Finalizza ordine");
+            setFinalizeButtonLabels(["Finalizza ordine", "Annulla ordine"]);
             setAdditiveNotesLabel("Note aggiuntive");
             setTableLabel("Tavolo n.");
-            setDialogLabels(["Sei sicuro di voler finalizzare l'ordine", "Annulla", "Finalizza"]);
-            setSnackbarLabels(["Ordine finalizzato", "Il campo 'Tavolo n.' è obbligatorio!"]);
+            setDialogLabels([
+                "Sei sicuro di voler finalizzare l'ordine",
+                "Annulla",
+                "Finalizza",
+                "Sei sicuro di voler annullare l'ordine",
+                "No",
+                "Si"
+            ]);
+            setSnackbarLabels([
+                "Ordine finalizzato",
+                "Ordine annullato",
+                "Il campo 'Tavolo n.' è obbligatorio!"
+            ]);
         }
     }, []);
 
     const finalizeOrder = () => {
-        localStorage.setItem('additiveNotes', notes);
+        if (notes !== null && notes !== '' && notes.length > 0) {
+            localStorage.setItem('additiveNotes', notes);
+        }
         localStorage.setItem('table', table);
 
-        fetch('http://localhost:8080/myWaiter/finalizeOrder', {
+        fetch(localStorage.getItem('host') + '/mywaiter/orders', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                order: JSON.parse(localStorage.getItem('order')),
-                notes: notes,
-                table: table
+                orderList: JSON.parse(localStorage.getItem('order')),
+                additiveNotes: notes,
+                table: table,
+                id: localStorage.getItem('orderId')
             })
         })
+            .then(res => res.json())
+            .then((data) => {
+                localStorage.setItem('orderId', data.id);
+            });
 
-        localStorage.setItem('finalized', 'OK');
-        setOpenDialog(false);
-        setOpenSuccessSnackbar(true);
+        localStorage.setItem('finalized', 'yes');
+        setOpenFinalizeOrderDialog(false);
+        setOpenFinalizeOrderSnackbar(true);
+    }
+
+    const cancelOrder = () => {
+        fetch(localStorage.getItem('host') + '/mywaiter/orders/' + localStorage.getItem('orderId'), {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+
+        localStorage.setItem('orderId', null);
+        localStorage.setItem('finalized', 'no');
+        setOpenCancelOrderDialog(false);
+        setOpenCancelOrderSnackbar(true);
     }
 
     const onChangeNotes = (e) => {
@@ -174,18 +230,29 @@ const Order = () => {
                         style={{ width: 100 }} />
                 }
 
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ marginLeft: 40 }}
-                    onClick={dialogOpen}>
-                    {finalizeButtonLabel}
-                </Button>
+                {localStorage.getItem('finalized') === 'no'
+                    ?
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{ marginLeft: 40 }}
+                        onClick={dialogFinalizeOrderOpen}>
+                        {finalizeButtonLabels[0]}
+                    </Button>
+                    :
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        style={{ marginLeft: 40 }}
+                        onClick={dialogCancelOrderOpen}>
+                        {finalizeButtonLabels[1]}
+                    </Button>
+                }
             </div>
 
             <Dialog
-                open={openDialog}
-                onClose={dialogClose}
+                open={openFinalizeOrderDialog}
+                onClose={dialogFinalizeOrderClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description">
                 <DialogContent>
@@ -194,7 +261,7 @@ const Order = () => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={dialogClose} color="primary">
+                    <Button onClick={dialogFinalizeOrderClose} color="primary">
                         {dialogLabels[1]}
                     </Button>
                     <Button onClick={finalizeOrder} color="primary" autoFocus>
@@ -202,14 +269,42 @@ const Order = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Dialog
+                open={openCancelOrderDialog}
+                onClose={dialogCancelOrderClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description">
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {dialogLabels[3]}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={dialogCancelOrderClose} color="primary">
+                        {dialogLabels[4]}
+                    </Button>
+                    <Button onClick={cancelOrder} color="primary" autoFocus>
+                        {dialogLabels[5]}
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
-            <Snackbar open={openSuccessSnackbar} autoHideDuration={3000} onClose={snackbarSuccessClose}>
+            <Snackbar open={openFinalizeOrderSnackbar} autoHideDuration={3000} onClose={snackbarFinalizeOrderClose}>
                 <Alert
                     className={alertClasses.cookieAlert}
-                    onClose={snackbarSuccessClose}
+                    onClose={snackbarFinalizeOrderClose}
                     severity="success"
                     variant="filled">
                     {snackbarLabels[0]}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openCancelOrderSnackbar} autoHideDuration={3000} onClose={snackbarCancelOrderClose}>
+                <Alert
+                    className={alertClasses.cookieAlert}
+                    onClose={snackbarCancelOrderClose}
+                    severity="success"
+                    variant="filled">
+                    {snackbarLabels[1]}
                 </Alert>
             </Snackbar>
             <Snackbar open={openErrorSnackbar} autoHideDuration={3000} onClose={snackbarErrorClose}>
@@ -218,7 +313,7 @@ const Order = () => {
                     onClose={snackbarErrorClose}
                     severity="error"
                     variant="filled">
-                    {snackbarLabels[1]}
+                    {snackbarLabels[2]}
                 </Alert>
             </Snackbar>
         </div >
